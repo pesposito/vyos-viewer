@@ -1,0 +1,93 @@
+import { NextRequest, NextResponse } from "next/server";
+import https from "https";
+
+// Agent that accepts self-signed certificates
+const agent = new https.Agent({ rejectUnauthorized: false });
+
+async function vyosFetch(
+  url: string,
+  body: Record<string, unknown>
+): Promise<{ status: number; data: string }> {
+  return new Promise((resolve, reject) => {
+    const payload = JSON.stringify(body);
+    const parsed = new URL(url);
+
+    const req = https.request(
+      {
+        hostname: parsed.hostname,
+        port: parsed.port || 443,
+        path: parsed.pathname,
+        method: "POST",
+        agent,
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(payload),
+        },
+        timeout: 10000,
+      },
+      (res) => {
+        let data = "";
+        res.on("data", (chunk) => (data += chunk));
+        res.on("end", () =>
+          resolve({ status: res.statusCode || 500, data })
+        );
+      }
+    );
+
+    req.on("error", reject);
+    req.on("timeout", () => {
+      req.destroy();
+      reject(new Error("Timeout de connexion à VyOS"));
+    });
+
+    req.write(payload);
+    req.end();
+  });
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const { host, apiKey, op, path } = await request.json();
+
+    if (!host || !apiKey) {
+      return NextResponse.json(
+        { error: "Host et clé API requis" },
+        { status: 400 }
+      );
+    }
+
+    const url = `https://${host}/retrieve`;
+
+    const body: Record<string, unknown> = {
+      op: op || "showConfig",
+      key: apiKey,
+    };
+
+    if (path) {
+      body.path = path;
+    }
+
+    const result = await vyosFetch(url, body);
+
+    if (result.status !== 200) {
+      return NextResponse.json(
+        { error: `VyOS API error (${result.status}): ${result.data}` },
+        { status: result.status }
+      );
+    }
+
+    let data;
+    try {
+      data = JSON.parse(result.data);
+    } catch {
+      // VyOS 1.3 may return plain text (show configuration commands)
+      data = { data: result.data };
+    }
+
+    return NextResponse.json(data);
+  } catch (err) {
+    const message =
+      err instanceof Error ? err.message : "Erreur de connexion à VyOS";
+    return NextResponse.json({ error: message }, { status: 502 });
+  }
+}

@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --border: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #eab308;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Zone matrix colors */
+.action-accept { background: #166534; color: #bbf7d0; }
+.action-drop { background: #991b1b; color: #fecaca; }
+.action-reject { background: #854d0e; color: #fef08a; }
+.action-none { background: #334155; color: #64748b; }
+.action-accept-light {
+  background: repeating-linear-gradient(
+    -45deg,
+    #166534,
+    #166534 4px,
+    #0a0a0a 4px,
+    #0a0a0a 5px
+  );
+  color: #bbf7d0;
+}
+.action-drop-light {
+  background: repeating-linear-gradient(
+    -45deg,
+    #991b1b,
+    #991b1b 4px,
+    #0a0a0a 4px,
+    #0a0a0a 5px
+  );
+  color: #fecaca;
+}
+.action-reject-light {
+  background: repeating-linear-gradient(
+    -45deg,
+    #854d0e,
+    #854d0e 4px,
+    #0a0a0a 4px,
+    #0a0a0a 5px
+  );
+  color: #fef08a;
+}
