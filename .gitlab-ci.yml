@@ -1,0 +1,13 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  only:
+    - main
+  script:
+    - cd /opt/vyos-viewer
+    - git pull origin main
+    - npm install --production=false
+    - npm run build
+    - sudo systemctl restart vyos-viewer
