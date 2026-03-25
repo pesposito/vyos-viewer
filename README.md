@@ -1,5 +1,7 @@
 # VyOS Viewer
 
+By Pierre-Marie Esposito ([InforConsult](https://inforconsult.fr)), 2026.
+
 A web-based dashboard for visualizing and monitoring VyOS router configurations. Provides a clear, graphical representation of firewall rules, zones, NAT, interfaces, and OpenVPN — making it easy to understand complex configurations at a glance.
 
 ## Screenshots
@@ -178,4 +180,6 @@ sudo systemctl enable --now vyos-viewer
 
 ## License
 
-MIT
+This project is licensed under the [MIT License](LICENSE).
+
+Copyright (c) 2026 Pierre-Marie Esposito -- InforConsult -- https://www.inforconsult.fr
