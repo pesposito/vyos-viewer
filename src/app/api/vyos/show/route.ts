@@ -22,7 +22,7 @@ async function vyosFetch(
           "Content-Type": "application/json",
           "Content-Length": Buffer.byteLength(payload),
         },
-        timeout: 10000,
+        timeout: 30000,
       },
       (res) => {
         let data = "";

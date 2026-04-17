@@ -102,7 +102,7 @@ export default function DashboardPage() {
     const { h, apiKey } = getCredentials();
     if (!h || !apiKey) return;
 
-    const raw = await fetchVyosShow(h, apiKey, ["log", "kernel"]);
+    const raw = await fetchVyosShow(h, apiKey, ["log", "tail", "5000"]);
     setDropLogs(parseFirewallLogs(raw));
   }, [getCredentials]);
 
@@ -126,7 +126,7 @@ export default function DashboardPage() {
         fetchVyosShow(h, apiKey, ["openvpn", "server"]),
         fetchVyosShow(h, apiKey, ["interfaces", "openvpn", "detail"]),
         fetchVyosShow(h, apiKey, ["firewall"]),
-        fetchVyosShow(h, apiKey, ["log", "kernel"]),
+        fetchVyosShow(h, apiKey, ["log", "tail", "5000"]),
       ]);
 
       setFirewall(parseFirewallFromJSON(fwData));
